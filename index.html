@@ -1,62 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Simple PWA</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#317EFB">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-    }
-    h1 { color: #317EFB; }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background-color: #317EFB;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f0f0f0; color: #333; }
+        header { background: #007BFF; color: white; text-align: center; padding: 1rem; }
+        main { max-width: 600px; margin: 1rem auto; padding: 0 1rem; }
+        section { background: white; padding: 1rem; border-radius: 5px; }
+        button { background: #007BFF; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        footer { background: #333; color: white; text-align: center; padding: 0.5rem; }
+    </style>
 </head>
 <body>
-  <h1>Hello World 👋</h1>
-  <p>This is my installable PWA site.</p>
-  <button id="installBtn" hidden>Install App</button>
+    <header>
+        <h1>Simple PWA</h1>
+    </header>
+    <main>
+        <section>
+            <h2>About</h2>
+            <p>A minimal PWA for testing. Hosted on GitHub Pages!</p>
+            <button id="installBtn">Install / Hi!</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Simple PWA</p>
+    </footer>
+    <script>
+        // Service Worker (embedded for single-file simplicity, but compatible with GitHub)
+        const swCode = `
+            const CACHE_NAME = 'pwa-cache-v1';
+            self.addEventListener('install', e => {
+                e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['/', '/index.html', '/manifest.json'])));
+            });
+            self.addEventListener('fetch', e => {
+                e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
+            });
+            self.addEventListener('activate', e => {
+                e.waitUntil(caches.keys().then(names => Promise.all(names.filter(n => n !== CACHE_NAME).map(n => caches.delete(n)))));
+            });
+        `;
+        const swBlob = new Blob([swCode], { type: 'application/javascript' });
+        const swURL = URL.createObjectURL(swBlob);
 
-  <script>
-    let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register(swURL)
+                    .then(reg => console.log('SW registered'))
+                    .catch(err => console.error('SW failed:', err));
+            });
+        }
 
-    // Listen for the install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.hidden = false; // show the button
-    });
-
-    // Handle install button click
-    installBtn.addEventListener('click', async () => {
-      installBtn.hidden = true;
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      const result = await deferredPrompt.userChoice;
-      console.log('User response:', result.outcome);
-      deferredPrompt = null;
-    });
-
-    // Register service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('Service Worker registered'))
-        .catch(err => console.log('SW registration failed:', err));
-    }
-  </script>
+        // Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', e => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').textContent = 'Install';
+        });
+        document.getElementById('installBtn').addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(choice => {
+                    console.log(choice.outcome === 'accepted' ? 'PWA installed' : 'Install dismissed');
+                    deferredPrompt = null;
+                    document.getElementById('installBtn').textContent = 'Hi!';
+                });
+            } else {
+                alert('Hi! Welcome to my PWA!');
+            }
+        });
+    </script>
 </body>
 </html>
