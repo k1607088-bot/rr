@@ -1,20 +1,15 @@
 {
-  "name": "My Simple PWA",
-  "short_name": "SimplePWA",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#317EFB",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+    "name": "Simple PWA",
+    "short_name": "PWA",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#007BFF",
+    "icons": [
+        {
+            "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAMAAACrrjgsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAGUExURQAAAP///6XZn90AAAAJcEhZcwAADsMAAA7DAcdvqGQAAABOSURBVBhXXcqxDcAwDAPB+6+8/6s2kY0kB1LI7O7Ozrs7O+/u7s7Ozuzs7Ozs7Ozs7Ozs7Ozs7Oz8zOzszM7OzM7OzM7OzM7OzM7OzM7Ozv4D3e8C4uYf81wAAAAASUVORK5CYII=",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ]
 }
