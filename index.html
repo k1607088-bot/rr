@@ -4,53 +4,58 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Simple PWA</title>
-
-  <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
-
+  <meta name="theme-color" content="#317EFB">
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      padding: 50px;
+      padding: 40px;
     }
+    h1 { color: #317EFB; }
     button {
+      margin-top: 20px;
       padding: 10px 20px;
       font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #317EFB;
+      color: white;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
   <h1>Hello World 👋</h1>
-  <p>This is my installable site!</p>
+  <p>This is my installable PWA site.</p>
   <button id="installBtn" hidden>Install App</button>
 
   <script>
     let deferredPrompt;
     const installBtn = document.getElementById('installBtn');
 
+    // Listen for the install prompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      installBtn.hidden = false;
+      installBtn.hidden = false; // show the button
     });
 
+    // Handle install button click
     installBtn.addEventListener('click', async () => {
       installBtn.hidden = true;
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`User response: ${outcome}`);
-        deferredPrompt = null;
-      }
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const result = await deferredPrompt.userChoice;
+      console.log('User response:', result.outcome);
+      deferredPrompt = null;
     });
 
     // Register service worker
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js');
-      });
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker registered'))
+        .catch(err => console.log('SW registration failed:', err));
     }
   </script>
 </body>
