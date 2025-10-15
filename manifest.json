@@ -1,13 +1,14 @@
 {
     "name": "Simple PWA",
     "short_name": "PWA",
+    "description": "A minimal Progressive Web App hosted on GitHub Pages",
     "start_url": "/index.html",
     "display": "standalone",
-    "background_color": "#fff",
+    "background_color": "#f0f0f0",
     "theme_color": "#007BFF",
     "icons": [
         {
-            "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAMAAACrrjgsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAGUExURQAAAP///6XZn90AAAAJcEhZcwAADsMAAA7DAcdvqGQAAABOSURBVBhXXcqxDcAwDAPB+6+8/6s2kY0kB1LI7O7Ozrs7O+/u7s7Ozuzs7Ozs7Ozs7Ozs7Ozs7Oz8zOzszM7OzM7OzM7OzM7OzM7OzM7Ozv4D3e8C4uYf81wAAAAASUVORK5CYII=",
+            "src": "/icon-192.png",
             "sizes": "192x192",
             "type": "image/png"
         }
